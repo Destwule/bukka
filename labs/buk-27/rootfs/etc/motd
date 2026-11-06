@@ -1,0 +1,10 @@
+
+  bukka-web-1 · Bukka production web server
+
+  Code:    /opt/bukka/api (API, installed in /opt/bukka/venv)
+           /opt/bukka/web/dist (built web app)
+  Config:  /etc/bukka/api.env
+  Data:    /var/lib/bukka (owned by the "bukka" service account)
+
+  Nothing is running the API yet. That's your ticket (BUK-27).
+
