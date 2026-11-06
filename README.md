@@ -42,15 +42,37 @@ The full details are in [CONTRIBUTING.md](CONTRIBUTING.md).
 ## What's in this repository
 
 ```
+api/              The Bukka API (Python, FastAPI): restaurants, menus, orders
+web/              The Bukka web app (React): customer site and kitchen screen
 tickets/          The tickets assigned to the team, one file per ticket
 scripts/verify/   Scripts you run on your machine to check your work
+labs/             Environments for tickets that need something broken on purpose
 team/             One file per team member
 runbooks/         What to do when something breaks (the team writes these)
 .github/          Pull request template, CI checks and automation
 ```
 
-The Bukka application itself (web app, API, database and background worker)
-arrives here as the team's work reaches it.
+## Running Bukka on your machine
+
+You need Python 3.10+ and Node.js 20+.
+
+```bash
+make setup      # install, create the database, load demo restaurants, build the web app
+make api-run    # API on http://localhost:8080
+make web-dev    # in a second terminal: web app on http://localhost:5173
+```
+
+Open http://localhost:5173, order some jollof, then watch it on the kitchen
+screen at http://localhost:5173/#/kitchen.
+
+How the pieces fit together in production:
+
+```
+browser ──► Nginx :80 ──┬── /        static files from web/dist
+                        └── /api/ ─► Bukka API :8080 ──► database
+```
+
+Details: [api/README.md](api/README.md) and [web/README.md](web/README.md).
 
 ## Getting help
 

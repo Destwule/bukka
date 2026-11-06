@@ -1,0 +1,93 @@
+:root {
+  --bg: #fffaf3;
+  --surface: #ffffff;
+  --text: #2b1d12;
+  --muted: #7a6a5c;
+  --primary: #e8590c;
+  --primary-dark: #c2410c;
+  --green: #2f9e44;
+  --border: #f1e3d3;
+  --radius: 14px;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+a { color: inherit; text-decoration: none; }
+h1 { font-size: 1.8rem; margin: 0.4rem 0; }
+h2 { font-size: 1.2rem; margin: 0 0 0.8rem; }
+h3 { font-size: 1.05rem; margin: 0 0 0.2rem; }
+p { margin: 0.2rem 0; }
+
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 2;
+}
+.brand { font-weight: 800; font-size: 1.25rem; color: var(--primary); }
+.topbar nav { display: flex; gap: 18px; font-weight: 600; }
+.topbar nav a:hover { color: var(--primary); }
+
+.container { max-width: 1040px; margin: 0 auto; padding: 20px 16px 40px; }
+.footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 24px; }
+
+.hero {
+  background: linear-gradient(135deg, #e8590c, #f59f00);
+  color: white; border-radius: var(--radius); padding: 28px; margin-bottom: 20px;
+}
+.hero h1 { font-size: 2rem; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; box-shadow: 0 1px 3px rgba(43, 29, 18, 0.05);
+}
+.restaurant { display: flex; gap: 14px; align-items: center; transition: transform 0.1s; }
+.restaurant:hover { transform: translateY(-2px); border-color: var(--primary); }
+.emoji { font-size: 2.4rem; width: 56px; height: 56px; display: grid; place-items: center;
+  background: #fff1e6; border-radius: 12px; flex-shrink: 0; }
+
+.muted { color: var(--muted); }
+.small { font-size: 0.86rem; }
+.error { color: #c92a2a; }
+.back { color: var(--muted); font-size: 0.9rem; }
+
+.menu-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start; }
+@media (max-width: 800px) { .menu-layout { grid-template-columns: 1fr; } }
+.dishes { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 10px; }
+.dish { display: flex; gap: 14px; align-items: center; }
+.grow { flex: 1; }
+.qty { display: flex; align-items: center; gap: 8px; }
+.qty span { min-width: 18px; text-align: center; font-weight: 700; }
+
+button {
+  background: var(--primary); color: white; border: 0; border-radius: 10px;
+  padding: 10px 14px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
+}
+button:hover { background: var(--primary-dark); }
+button:disabled { opacity: 0.6; cursor: wait; }
+.qty button { width: 34px; height: 34px; padding: 0; border-radius: 50%; }
+
+.cart { position: sticky; top: 76px; }
+.cart form { display: grid; gap: 10px; }
+.cart label { display: grid; gap: 4px; font-size: 0.85rem; font-weight: 600; }
+.cart input { padding: 10px; border: 1px solid var(--border); border-radius: 8px; font: inherit; }
+.line { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; }
+.total { border-top: 1px dashed var(--border); padding-top: 8px; font-weight: 800; }
+.plain { list-style: none; padding: 0; margin: 12px 0; }
+
+.tracker { max-width: 560px; margin: 0 auto; }
+.steps { list-style: none; padding: 0; margin: 18px 0; display: grid; gap: 10px; counter-reset: step; }
+.steps li { padding: 10px 14px; border-radius: 10px; background: #f8f1e9; color: var(--muted); font-weight: 600; }
+.steps li.done { background: #ebfbee; color: var(--green); }
+.steps li.done::before { content: "✓ "; }
+
+.ticket { display: grid; gap: 8px; }
+.pill { font-size: 0.75rem; background: #fff1e6; color: var(--primary-dark); padding: 3px 8px; border-radius: 999px; font-weight: 700; }
+.status-preparing { border-left: 4px solid #f59f00; }
+.status-out_for_delivery { border-left: 4px solid #1c7ed6; }
+.status-placed { border-left: 4px solid var(--primary); }
+
+.problem { text-align: center; padding: 40px 16px; }
