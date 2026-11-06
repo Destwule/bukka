@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Manage the Bukka API like a service: bukka-api start|stop|restart|status|logs
+# (On a normal server this would be systemd: systemctl restart bukka-api.)
+set -euo pipefail
+PIDFILE=/run/bukka-api.pid
+LOG=/var/log/bukka/api.log
+
+start() {
+  if status >/dev/null 2>&1; then echo "bukka-api is already running"; return 0; fi
+  mkdir -p /var/log/bukka
+  set -a; . /etc/bukka/api.env; set +a
+  nohup sudo -E -u oncall python -m bukka_api.main >>"$LOG" 2>&1 &
+  echo $! > "$PIDFILE"
+  sleep 1
+  echo "bukka-api started (pid $(cat "$PIDFILE")), listening on ${BUKKA_HOST}:${BUKKA_PORT}"
+}
+stop() {
+  if [ -f "$PIDFILE" ]; then
+    pkill -TERM -f "bukka_api.main" || true
+    rm -f "$PIDFILE"
+    echo "bukka-api stopped"
+  else
+    echo "bukka-api is not running"
+  fi
+}
+status() {
+  if pgrep -f "bukka_api.main" >/dev/null; then echo "bukka-api is running"; else echo "bukka-api is stopped"; return 3; fi
+}
+case "${1:-}" in
+  start) [ "$(id -u)" -eq 0 ] || exec sudo "$0" start; start ;;
+  stop) [ "$(id -u)" -eq 0 ] || exec sudo "$0" stop; stop ;;
+  restart) [ "$(id -u)" -eq 0 ] || exec sudo "$0" restart; stop; sleep 1; start ;;
+  status) status ;;
+  logs) tail -n "${2:-50}" "$LOG" ;;
+  *) echo "usage: bukka-api start|stop|restart|status|logs [lines]"; exit 2 ;;
+esac
