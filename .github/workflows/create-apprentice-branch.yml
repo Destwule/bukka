@@ -1,0 +1,38 @@
+name: create apprentice branch
+
+# When a new team/<username>.md lands on main, create apprentice/<username>.
+on:
+  push:
+    branches: [main]
+    paths: ["team/*.md"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create missing apprentice branches
+        run: |
+          set -euo pipefail
+          for f in team/*.md; do
+            u=$(basename "$f" .md)
+            [ "$u" = "README" ] && continue
+            if ! [[ "$u" =~ ^[A-Za-z0-9-]+$ ]]; then
+              echo "::warning::Skipping $f: not a valid GitHub username."
+              continue
+            fi
+            if git ls-remote --exit-code --heads origin "apprentice/$u" >/dev/null 2>&1; then
+              echo "apprentice/$u already exists"
+            else
+              git push origin "HEAD:refs/heads/apprentice/$u"
+              echo "::notice::Created apprentice/$u for @$u"
+            fi
+          done
