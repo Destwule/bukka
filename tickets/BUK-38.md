@@ -114,10 +114,11 @@ No AWS account, no credit card, no bill. See the Notes for setup.
   rest of the account. This is called least privilege.
 - **Why us-east-1?** AWS only publishes billing metrics in `us-east-1`, so
   we keep everything in that one region for now.
-- **Starting LocalStack:**
+- **Starting LocalStack** (version pinned: newer images need a LocalStack
+  account):
   ```bash
-  docker run --rm -d --name localstack -p 4566:4566 -p 4510-4559:4510-4559 \
-    -v /var/run/docker.sock:/var/run/docker.sock localstack/localstack
+  docker run --rm -d --name localstack -p 4566:4566 \
+    -v /var/run/docker.sock:/var/run/docker.sock localstack/localstack:4.14.0
   ```
 - **Pointing the AWS CLI at it:**
   ```bash

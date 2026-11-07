@@ -20,8 +20,9 @@
 > before it happens.
 >
 > From now on production is code. Everything from BUK-38, BUK-42 and
-> BUK-45 goes into Terraform, split into modules so the network, the
-> server, the database and the photos bucket can be reviewed on their own.
+> the AWS side of BUK-45 goes into Terraform, split into modules so the
+> network, the server, the database's firewall and the photos bucket can be
+> reviewed on their own.
 > Every change gets a plan that a teammate reads in the pull request
 > before anyone applies it. And I want to see you tear the whole thing
 > down and build it again, so we know it really works from scratch.
@@ -43,11 +44,11 @@ No AWS account, no credit card, no bill. See the Notes for setup.
      backend.tf       remote state
      main.tf          calls the modules and wires them together
      variables.tf     inputs, each with a type and a description
-     outputs.tf       VPC ID, API server ID, RDS endpoint, bucket name
+     outputs.tf       VPC ID, API server ID, bukka-db-sg ID, bucket name
      modules/
        network/       VPC, subnets, internet gateway, route tables (BUK-42)
        compute/       IAM role and instance profile, bukka-web-sg, bukka-api-1 (BUK-38)
-       database/      DB subnet group, bukka-db-sg, bukka-orders-db (BUK-45)
+       database/      bukka-db-sg (BUK-45)
        storage/       menu photos bucket, Block Public Access, SSE-S3 (BUK-45)
        billing/       SNS topic and the spend alarm (BUK-38)
    ```
@@ -61,10 +62,10 @@ No AWS account, no credit card, no bill. See the Notes for setup.
 4. Everything the verify scripts for BUK-38, BUK-42 and BUK-45 checked
    still holds: the same names, CIDRs and tags, read-only access to one
    bucket, `5432` only from `bukka-web-sg`, no route from the database
-   subnets to the internet, the database not publicly accessible.
-5. No secrets in the code. The database password is a variable marked
-   `sensitive = true` with no default, passed in with
-   `TF_VAR_db_password`. No access keys anywhere.
+   subnets to the internet, Block Public Access and SSE-S3 on the bucket.
+5. No secrets in the code: no passwords and no access keys anywhere.
+   The database server itself stays in `infra/db/orders-db.sh` from
+   BUK-45 (Terraform manages the AWS side only).
 
 ### Remote state
 
@@ -87,7 +88,7 @@ No AWS account, no credit card, no bill. See the Notes for setup.
 12. `terraform destroy` removes everything cleanly, and a second
     `terraform apply` builds it all again.
 13. Remove `infra/cli/buk-38.sh`, `buk-42.sh` and `buk-45.sh`. Terraform is
-    now the only way production is built.
+    now the only way the AWS side is built. Keep `infra/db/orders-db.sh`.
 
 ### Write it down
 
@@ -95,8 +96,9 @@ No AWS account, no credit card, no bill. See the Notes for setup.
     - Why you split the modules the way you did, and what each one outputs
     - Why state lives in S3 and not on your laptop, and why it needs
       locking
-    - What's in the state file that makes it sensitive (look for the
-      database password)
+    - Why state files are treated as secrets: look inside yours, and say
+      what would end up there if Terraform also created the database
+      password
 
 ### Submit
 
@@ -130,10 +132,11 @@ No AWS account, no credit card, no bill. See the Notes for setup.
 - **Why remote state?** State is Terraform's memory of what it built. On
   one laptop it's lost when the laptop is, and two people applying at once
   can corrupt it. A shared, versioned, locked bucket fixes both.
-- **Starting LocalStack:**
+- **Starting LocalStack** (version pinned: newer images need a LocalStack
+  account):
   ```bash
-  docker run --rm -d --name localstack -p 4566:4566 -p 4510-4559:4510-4559 \
-    -v /var/run/docker.sock:/var/run/docker.sock localstack/localstack
+  docker run --rm -d --name localstack -p 4566:4566 \
+    -v /var/run/docker.sock:/var/run/docker.sock localstack/localstack:4.14.0
   ```
 - **Pointing Terraform at it:**
   ```bash
