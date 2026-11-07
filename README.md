@@ -65,12 +65,29 @@ make web-dev    # in a second terminal: web app on http://localhost:5173
 Open http://localhost:5173, order some jollof, then watch it on the kitchen
 screen at http://localhost:5173/#/kitchen.
 
-How the pieces fit together in production:
+That runs the API as one process (the "monolith"), which is all you need
+for most tickets. In production Bukka is split into services:
 
 ```
-browser ──► Nginx :80 ──┬── /        static files from web/dist
-                        └── /api/ ─► Bukka API :8080 ──► database
+                         ┌── /                  static files (React app)
+browser ──► web (Nginx) ─┼── /api/restaurants* ─► menu-service  :8080 ──┐
+                         └── /api/orders*,      ─► order-service :8080 ──┼──► PostgreSQL
+                             /api/kitchen*              │                │
+                                                        ▼ order_placed   │
+                                                      Redis ──► worker ──┘
 ```
+
+| Piece | What it does | Run it with |
+|---|---|---|
+| web | Nginx serving the built React app, forwarding `/api/` to the services | `web/dist` + Nginx |
+| menu-service | Restaurants and menus | `python -m bukka_api.services.menu` |
+| order-service | Orders and the kitchen screen; queues a job for each new order | `python -m bukka_api.services.orders` |
+| worker | Prints the kitchen ticket and moves orders to `delivered` | `python -m bukka_api.worker` |
+| Redis | The job queue between the order service and the worker | |
+| PostgreSQL | Restaurants, menus and orders, shared by the services | |
+
+All the Python pieces come from the same `api/` package. Without Redis
+(`REDIS_URL` unset) nothing is queued and the kitchen moves orders by hand.
 
 Details: [api/README.md](api/README.md) and [web/README.md](web/README.md).
 

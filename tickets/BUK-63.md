@@ -48,45 +48,59 @@ back by guessing. 🙈
    the pipeline.
 5. **Web build:** `npm ci` and `npm run build` in `web/`. A broken build
    fails the pipeline.
-6. **Lint the shell scripts** with `shellcheck`. Any warning fails the
-   pipeline. Fix the warnings rather than turning the rule off, unless you
-   can explain why in your design note.
-7. **Lint every Dockerfile** with `hadolint`, with the same rule.
-8. The image build only starts once all the checks above pass.
+6. **Lint your shell scripts** with `shellcheck`: at least everything in
+   `scripts/ops/` and `infra/` from your earlier tickets. (`scripts/verify/`,
+   `labs/` and `.github/scripts/` belong to the team; leave them out.) Any
+   warning fails the pipeline. Fix the warnings rather than turning the
+   rule off, unless you can explain why in your design note.
+7. **Lint every Dockerfile** from BUK-58 with `hadolint`, with the same rule.
+8. The image build only starts once all the checks above pass (`needs:`).
+9. The workflow itself is clean: [`actionlint`](https://github.com/rhysd/actionlint)
+   reports no problems in `.github/workflows/ci.yml`.
 
 ### Build and publish the images
 
-9. Build the `web`, `api` and worker images from your BUK-58 Dockerfiles
-   (or `web` and `api`, if your worker reuses the API image).
-10. **Tag every image with the git commit SHA**, for example
+10. Build the images from your BUK-58 Dockerfiles, named:
+    - `ghcr.io/<your-github-username>/bukka-web`, from `web/`
+    - `ghcr.io/<your-github-username>/bukka-api`, from `api/`. The menu
+      service, the order service and the worker all run from this image.
+      (If your worker has its own Dockerfile, also build `bukka-worker`.)
+11. **Tag every image with the git commit SHA** as `sha-` plus the first 7
+    characters of the commit, for example
     `ghcr.io/<your-github-username>/bukka-api:sha-3f9c2ab`. You may add
     other tags too, such as the branch name, but never publish `latest` on
     its own.
-11. **Publish to GitHub Container Registry (GHCR)** using the built-in
-    `GITHUB_TOKEN`. No personal access tokens and no passwords in the
+12. **Publish to GitHub Container Registry (GHCR)** using the built-in
+    `GITHUB_TOKEN`. No personal access tokens and no other secrets in the
     workflow.
-12. **Publish only on a push**, never from a pull request. Pull requests
+13. **Publish only on a push**, never from a pull request. Pull requests
     build the images to prove they still build, then stop.
-13. Make the packages **public** in your GitHub settings so the cluster in
+14. Make the packages **public** in your GitHub settings so the cluster in
     BUK-70 can pull them without a password.
 
 ### Prove it catches problems
 
-14. Push a commit that breaks one API test. Copy the link to the red run,
+15. Push a commit that breaks one API test. Copy the link to the red run,
     then revert the commit and get the pipeline green again.
 
 ### Submit
 
-15. Work on a branch called `buk-63-ci-pipeline`, created from
+16. Work on a branch called `buk-63-ci-pipeline`, created from
     `upstream/apprentice/<your-github-username>`.
-16. Once a run on your fork is green and the images are published, run
-    `bash scripts/verify/buk-63.sh`. It writes
-    `artifacts/buk-63-ci.txt`.
-17. Commit the workflow, any lint fixes and the audit file, push, and open
+17. Once a run on your fork is green and the images are published, run
+    `bash scripts/verify/buk-63.sh`. It needs the GitHub CLI, logged in
+    (`gh auth login`), and Docker (it runs `actionlint` in a container if
+    you don't have it installed). It checks your workflow, then asks GitHub
+    for your fork's green run, your red run, and the `sha-` tagged images of
+    the green run's commit. It writes `artifacts/buk-63-ci.txt`.
+18. Commit the workflow, any lint fixes and the audit file, push, and open
     a pull request into `apprentice/<your-github-username>`, titled
-    `ci: test, build and publish images on every change (BUK-63)`.
-18. In the pull request description, add a short **design note**:
-    - links to one green run and the red run from step 14
+    `ci: test, build and publish images on every change (BUK-63)`. The
+    `verify` check lints your workflow again and looks up the runs and
+    images in your audit on GitHub. If you change `ci.yml` after the
+    audit, push, wait for a green run, and run the verify script again.
+19. In the pull request description, add a short **design note**:
+    - links to one green run and the red run from step 15
     - the full name and tag of one image you published, and how you'd find
       the commit it was built from
     - why the pipeline doesn't publish images from pull requests
@@ -115,6 +129,11 @@ back by guessing. 🙈
 - Useful actions: `actions/checkout`, `actions/setup-python`,
   `actions/setup-node`, `docker/login-action`, `docker/build-push-action`,
   `docker/metadata-action` (it can make the `sha-` tag for you).
+- **Actions are switched off on new forks.** Open the **Actions** tab on
+  your fork and enable them, or nothing will run when you push.
+- The verify script only counts a green run triggered by a **push** to a
+  `buk-63-*` branch on your fork, and the image tags must match that run's
+  commit. The red run can be on any branch.
 - GHCR image names must be lowercase. If your GitHub username has capital
   letters, lowercase it in the image name.
 - Your first workflow run on the team repo may wait for a maintainer to
