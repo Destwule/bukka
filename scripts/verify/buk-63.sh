@@ -73,10 +73,12 @@ fi
 ORIGIN=$(git remote get-url origin 2>/dev/null || true)
 REPO="${BUK63_REPO:-$(printf '%s' "$ORIGIN" | sed -E 's#^(git@github\.com:|https://github\.com/|ssh://git@github\.com/)##; s#\.git$##')}"
 OWNER="${REPO%%/*}"
-if [ -n "$GH_USER" ] && [ "$(printf '%s' "$OWNER" | tr '[:upper:]' '[:lower:]')" = "$(printf '%s' "$GH_USER" | tr '[:upper:]' '[:lower:]')" ]; then
-  add "PASS  origin is your fork ($REPO)"
-else
-  add "FAIL  origin is your fork → origin is '${REPO:-not set}'; it should be $GH_USER/bukka"
+if [ -n "$GH_USER" ]; then  # (without your identity there's nothing to compare with)
+  if [ "$(printf '%s' "$OWNER" | tr '[:upper:]' '[:lower:]')" = "$(printf '%s' "$GH_USER" | tr '[:upper:]' '[:lower:]')" ]; then
+    add "PASS  origin is your fork ($REPO)"
+  else
+    add "FAIL  origin is your fork → origin is '${REPO:-not set}'; it should be $GH_USER/bukka"
+  fi
 fi
 
 if ! command -v gh >/dev/null 2>&1; then
