@@ -9,7 +9,7 @@ F="artifacts/buk-51-terraform-audit.txt"
 TF="infra/terraform"
 MODULES="network compute database storage billing"
 TF_VERSION="${TF_VERSION:-1.16.7}"
-EXPECTED_PASSES=45
+EXPECTED_PASSES=49
 FAILS=0
 ok()  { echo "✓ $1"; }
 bad() { echo "::error::$1"; echo "✗ $1"; FAILS=$((FAILS + 1)); }
