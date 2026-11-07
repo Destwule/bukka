@@ -44,8 +44,13 @@ if [ -n "$DB_UP" ]; then
   IMG=$(docker inspect -f '{{.Config.Image}}' "$DB")
   [[ "$IMG" == postgres:16* ]] && pass "Runs PostgreSQL 16 ($IMG)" || fail "Runs PostgreSQL 16" "The image is '$IMG'."
 
-  if [ -z "$(docker port "$DB")" ]; then pass "No published ports"; else
-    fail "No published ports" "docker port $DB shows: $(docker port "$DB" | tr '\n' ' ')"; fi
+  # What it asked for (-p / -P), not just what Docker managed to open.
+  BINDS=$(docker inspect -f '{{json .HostConfig.PortBindings}}{{.HostConfig.PublishAllPorts}}' "$DB")
+  if [ -z "$(docker port "$DB")" ] && { [ "$BINDS" = "{}false" ] || [ "$BINDS" = "nullfalse" ]; }; then
+    pass "No published ports"
+  else
+    fail "No published ports" "Remove -p / -P from the docker run command (found $BINDS)."
+  fi
 
   NETS=$(docker inspect -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}} {{end}}' "$DB" | xargs)
   if [ "$NETS" = "bukka-db-net" ]; then pass "Only on bukka-db-net"; else
