@@ -65,7 +65,8 @@ No AWS account, no credit card, no bill. See the Notes for setup.
    the internet gateway (only the built-in `local` route). Associate it with
    both database subnets.
 7. No route table in the VPC sends database subnet traffic to the internet.
-   Check the VPC's main route table too.
+   Check the VPC's main route table too: a subnet without its own route
+   table association uses the main one.
 
 ### Write it down
 
@@ -125,7 +126,8 @@ No AWS account, no credit card, no bill. See the Notes for setup.
   export AWS_DEFAULT_REGION=us-east-1
   ```
 - LocalStack forgets everything when it stops, so keep `infra/cli/buk-42.sh`
-  up to date. Tip: capture IDs into variables as you go, e.g.
+  up to date. Run it once on a fresh LocalStack: running it twice creates a
+  second `bukka-prod-vpc`, and the verify script expects exactly one. Tip: capture IDs into variables as you go, e.g.
   `VPC_ID=$(aws ec2 create-vpc ... --query Vpc.VpcId --output text)`.
 - Useful commands: `aws ec2 create-vpc`, `aws ec2 create-subnet`,
   `aws ec2 modify-subnet-attribute --map-public-ip-on-launch`,
