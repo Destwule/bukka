@@ -131,7 +131,9 @@ No AWS account, no credit card, no bill. See the Notes for setup.
   `test` / `test` are LocalStack's dummy keys. They live in your shell only,
   never on the server and never in the repo.
 - LocalStack forgets everything when it stops. That's why you save your
-  commands in `infra/cli/buk-38.sh`: run it again and you're back.
+  commands in `infra/cli/buk-38.sh`: run it again and you're back. Run it on
+  a fresh LocalStack: running it twice launches a second `bukka-api-1`, and
+  the verify script expects exactly one.
 - LocalStack accepts the AMI IDs it lists with `aws ec2 describe-images`.
   The instance is simulated, so you won't SSH into it. The verify script
   checks how it's configured.
