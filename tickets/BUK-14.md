@@ -6,23 +6,29 @@
 | **Priority** | High |
 | **Epic** | BUK-1 Platform foundations |
 | **Month** | 1 |
-| **Reporter** | Hussein (Engineering Lead) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of your first week |
 
 ## Context
 
-> Welcome to the platform team! 👋 Before you can touch anything that runs
-> in production, I need two things from you this week.
->
-> First, join the team in the repo so you get your own branch. Second, get
-> your machine set up the way we'd expect on a production server: you work
-> as a normal user, not root, and GitHub knows you by an SSH key, not a
-> password. Every ticket after this one assumes both are in place.
->
-> Shout in the channel if anything gets in your way.
->
-> — Hussein
+### Why this matters
+
+Welcome to the Bukka platform team! 👋 Every restaurant partner and every
+hungry customer depends on what this team runs. Before you change anything
+that touches production, we need to know who you are in the repo and trust
+how your machine connects to it.
+
+### What I need from you
+
+- Join the team in the repo, so you get your own `apprentice/<username>` branch.
+- Work as a normal user with `sudo`, not as root, the way we do on every server.
+- Connect to GitHub with an SSH key, not a password.
+
+Every ticket after this one assumes all three are in place. Shout in the
+channel if anything gets in your way.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 

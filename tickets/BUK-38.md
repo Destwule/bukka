@@ -7,28 +7,31 @@
 | **Epic** | BUK-2 Move to the cloud |
 | **Month** | 2 |
 | **Sprint** | 5 |
-| **Reporter** | Amaka (Security) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of sprint 5 |
 
 ## Context
 
-> Hi team 👋 Quick one from the security review before we put anything in
-> AWS.
->
-> Last week I found an AWS access key pasted into a `.env` file on
-> bukka-prod-1 so the API could read menu photos. Anyone who gets on that
-> box, or sees that file in a screenshot, can use that key from anywhere in
-> the world, and it never expires. That can't follow us into the cloud.
->
-> For the new API server I want three things: no keys on the machine at
-> all, the server can **read** menu photos and nothing else, and only web
-> traffic gets in from the internet. Also, finance asked me to make sure
-> nobody wakes up to a surprise AWS bill, so please put an alarm on
-> spending while you're there.
->
-> Thanks,
-> Amaka, Security
+### Why this matters
+
+We're starting the move to AWS this month. Last week a security review found
+an AWS access key pasted into a `.env` file on bukka-prod-1 so the API could
+read menu photos. Anyone who gets on that box, or sees that file in a
+screenshot, can use that key from anywhere, and it never expires. A leak like
+that is the kind of headline that ends a food startup. Finance has also asked
+for one promise: no surprise AWS bills.
+
+### What I need from you
+
+- No keys on the API server at all: it gets an IAM role through an instance
+  profile.
+- The role can **read** the menu photos bucket and nothing else.
+- Only web traffic gets in from the internet; SSH is closed or limited to
+  your own IP.
+- A billing alarm that tells us the moment we spend anything.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 
@@ -100,7 +103,7 @@ No AWS account, no credit card, no bill. See the Notes for setup.
 
 - [ ] `verify` passes on your pull request
 - [ ] A teammate has reviewed and approved your pull request
-- [ ] Your design note would convince Amaka that the old key problem can't
+- [ ] Your design note would convince a security reviewer that the old key problem can't
       happen again
 
 ## Notes

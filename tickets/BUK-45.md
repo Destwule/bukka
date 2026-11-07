@@ -7,30 +7,33 @@
 | **Epic** | BUK-2 Move to the cloud |
 | **Month** | 2 |
 | **Sprint** | 7 |
-| **Reporter** | Hussein (Engineering Lead) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of sprint 7 |
 
 ## Context
 
-> The network from BUK-42 is ready, so now we can move the two things I
-> lose sleep over.
->
-> First, the orders database. It's still a file on the API server's own
-> disk. Every lunch rush the API and the database fight over the same CPU
-> and memory, and if that one box dies we lose orders. I want the orders in
-> PostgreSQL, on its own server, on a private network where nothing on the
-> internet can reach it and it can't reach the internet either. Only our API
-> servers get in, and only over an encrypted connection.
->
-> Second, menu photos. Right now they're in a folder on Bisi's laptop
-> called `menu photos FINAL (2)`, and she emails them to whoever updates
-> the menu. 😅 They belong in the `bukka-menu-photos` bucket from BUK-38,
-> private and encrypted. The `Dish.photo_key` column in the API is already
-> waiting for them.
->
-> Thanks,
-> Hussein
+### Why this matters
+
+Two things keep me up at night. First, the orders: they're still a file on
+the API server's own disk. Every lunch rush the API and the database fight
+over the same CPU and memory, and if that one box dies we lose orders that
+customers have already paid for. Second, menu photos: they live in a folder
+called `menu photos FINAL (2)` on a laptop and get emailed around whenever a
+menu changes. 😅
+
+### What I need from you
+
+- The orders move to PostgreSQL on its own server, on a private network
+  where nothing on the internet can reach it and it can't reach the internet
+  either. Only our API servers get in, and only over an encrypted connection.
+- The AWS side matches: a database security group that only lets the API
+  servers in.
+- Menu photos move into the `bukka-menu-photos` bucket from BUK-38, private
+  and encrypted. The `Dish.photo_key` column in the API is already waiting
+  for them.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 
@@ -138,7 +141,7 @@ There are two halves, both on your machine, no AWS account and no bill:
 - [ ] `verify` passes on your pull request
 - [ ] A teammate has reviewed and approved your pull request
 - [ ] No password appears anywhere in your commits (check `git log -p`)
-- [ ] Amaka could read your evidence and agree the database is private
+- [ ] A security reviewer could read your evidence and agree the database is private
 
 ## Notes
 

@@ -7,29 +7,30 @@
 | **Epic** | BUK-3 Containers and continuous delivery |
 | **Month** | 3 |
 | **Sprint** | 11 |
-| **Reporter** | Hussein (Engineering Lead) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of Sprint 11 |
 
 ## Context
 
-> Yesterday at 12:40 we pushed a one-line fix to the menu page. Compose
-> stopped the old containers, then started the new ones, and for about four
-> minutes the kitchen screen showed "Something went wrong". Mama Titi's in
-> Yaba missed six orders and called our partner team, not very happy.
->
-> We can't keep saving every deploy for 10pm. Restaurants change prices and
-> sell out of dishes in the middle of the day, and we need to ship small
-> fixes at any time, even during the 12 to 2pm rush, without anyone
-> noticing.
->
-> So we're moving to Kubernetes. Run at least two copies of everything
-> customers touch, only send traffic to a copy once it's ready, and replace
-> them one at a time. Use the images CI publishes from BUK-63. Start on a
-> local cluster (kind or k3d); the manifests should be the same ones we'd
-> use in production.
->
-> Hussein
+### Why this matters
+
+Yesterday at 12:40 we pushed a one-line fix to the menu page. Compose stopped
+the old containers before starting the new ones, and for about four minutes
+the kitchen screen showed "Something went wrong". Mama Titi's in Yaba missed
+six orders. Restaurants change prices and sell out of dishes in the middle of
+the day, so we have to be able to ship at any time, even during the 12 to
+2pm rush, without anyone noticing.
+
+### What I need from you
+
+- Move Bukka to Kubernetes, starting on a local cluster (kind or k3d) with
+  the same manifests we'd use in production.
+- At least two copies of everything customers touch; traffic only goes to a
+  copy once it's ready, and copies are replaced one at a time.
+- Use the images CI publishes from BUK-63.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 

@@ -7,25 +7,29 @@
 | **Epic** | BUK-1 Platform foundations |
 | **Month** | 1 |
 | **Sprint** | 4 |
-| **Reporter** | Kemi (Operations) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of the week |
 
 ## Context
 
-> Two things from ops this week:
->
-> 1. Last Tuesday the disk on bukka-web-1 filled up with logs and the API
->    stopped taking orders. We only found out when restaurants called. I'd
->    like a script that checks the basics every few minutes and **shouts**
->    before customers notice.
-> 2. Every evening I open the API logs and squint at them to see how lunch
->    went. Can we get a small report instead: how many requests, how many
->    errors, how slow we were at the worst moments, and what people used most?
->
-> The API already writes one JSON line per request, so the data is there.
->
-> — Kemi, Operations
+### Why this matters
+
+Last Tuesday the disk on bukka-web-1 filled up with logs and the API stopped
+taking orders. We found out when restaurants called, not from our own
+monitoring. I also can't answer basic product questions like "how did lunch
+go?" without someone squinting at raw logs every evening.
+
+### What I need from you
+
+- A health-check script that checks disk, memory and the API every few
+  minutes and **shouts** (with a proper exit code) before customers notice.
+- A small daily traffic report built from the API's JSON logs: how many
+  requests, how many errors, how slow we were at the worst moments, and what
+  people used most.
+- Both scheduled with cron, with their output kept under `/var/log/bukka/`.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 
@@ -86,7 +90,7 @@
 
 - [ ] `verify` passes on your pull request. It runs the same tests again on GitHub's servers
 - [ ] A teammate has reviewed and approved it
-- [ ] Kemi could read the report without asking you what anything means
+- [ ] Someone outside the team could read the report without asking you what anything means
 
 ## Notes
 

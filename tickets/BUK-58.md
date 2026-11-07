@@ -7,33 +7,31 @@
 | **Epic** | BUK-3 Containers and continuous delivery |
 | **Month** | 3 |
 | **Sprint** | 9 |
-| **Reporter** | Hussein (Engineering Lead) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of Sprint 9 |
 
 ## Context
 
-> Morning all. Two things are landing this sprint and I want them packaged
-> properly from day one.
->
-> First, the **worker**. Right now restaurants move every order along by
-> hand on the kitchen screen. The worker will pick jobs off a queue and move
-> orders through their statuses, so the kitchen staff can focus on cooking.
-> **Redis** is the queue. I'll merge the worker and Redis code into `main`
-> before the sprint starts, so you don't need to write any of it. Your job is
-> to package it and run it.
->
-> Second, the reason I want containers. At the last deploy, the API passed
-> every test on my laptop and then fell over on the server because it had a
-> different Python version and was missing a system library. The kitchen
-> screen was blank for most of the 12 o'clock rush and three restaurant
-> partners called to ask if we'd gone down. "Works on my machine" can't be
-> how we ship food orders.
->
-> I want every part of Bukka built into an image, and one command that starts
-> the whole stack the same way on any laptop.
->
-> Hussein
+### Why this matters
+
+At the last deploy, the API passed every test on a laptop and then fell over
+on the server because of a different Python version and a missing system
+library. The kitchen screen was blank for most of the 12 o'clock rush and
+three restaurant partners called to ask if we'd gone down. "Works on my
+machine" can't be how we ship food orders, especially now that Bukka is
+growing into several services.
+
+### What I need from you
+
+- The app now has more moving parts on `main`: separate **menu** and
+  **order** services, a **worker** that takes jobs off a **Redis** queue, and
+  PostgreSQL. You don't write that code; you package and run it.
+- Every part built into a small, non-root image.
+- One command that starts the whole stack the same way on any laptop, with
+  the data surviving a restart and no secrets in the repo.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 
