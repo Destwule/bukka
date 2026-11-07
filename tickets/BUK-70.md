@@ -38,22 +38,27 @@ the day, so we have to be able to ship at any time, even during the 12 to
 
 1. Put your manifests in `k8s/`, one file per kind of resource or per
    service, whichever you find easier to read.
-2. **Deployments** for `web`, `api` and `worker`, using your images from
-   GHCR, tagged with a commit SHA (never `latest`).
-3. **`web` and `api` run at least 2 replicas.** The worker can run 1.
+2. **Deployments** for `web`, `menu-service`, `order-service` and
+   `worker`, using your images from GHCR (`bukka-web` and `bukka-api`),
+   tagged with a commit SHA (never `latest`).
+3. **`web`, `menu-service` and `order-service` run at least 2 replicas.**
+   The worker can run 1.
 4. **Rolling updates never take a copy away before the new one is ready:**
-   `strategy.rollingUpdate.maxUnavailable: 0` (with `maxSurge: 1`) on `web`
-   and `api`.
-5. **Probes on the API:**
+   `strategy.rollingUpdate.maxUnavailable: 0` (with `maxSurge: 1`) on
+   `web`, `menu-service` and `order-service`.
+5. **Probes on the two API services:**
    - liveness probe on `GET /healthz`
    - readiness probe on `GET /readyz`
 
-   Give `web` a probe that checks Nginx answers.
+   Give `web` a probe that checks Nginx answers, and the worker a liveness
+   probe on its own `/healthz` port.
 6. **Resource requests and limits** (CPU and memory) on every container.
 7. **No container runs as root:** `securityContext.runAsNonRoot: true` on
    every pod, and the pods actually start with it.
-8. **Services** for `web` and `api`, so pods find each other by name. The
-   web container's Nginx forwards `/api/` to the `api` Service.
+8. **Services** for `web`, `menu-service` and `order-service`, so pods find
+   each other by name. The web container's Nginx forwards
+   `/api/restaurants*` to `menu-service` and `/api/orders*` and
+   `/api/kitchen*` to `order-service`, as in BUK-58.
 9. A **ConfigMap** for settings that aren't secret, and a **Secret** for the
    database password and `DATABASE_URL`. This repo is public: commit a
    `secret.example.yaml` with placeholder values and create the real Secret
@@ -63,8 +68,8 @@ the day, so we have to be able to ship at any time, even during the 12 to
     Deployments (or StatefulSets), with a PersistentVolumeClaim for the
     database. They don't need the zero-downtime treatment. Say why in your
     design note.
-12. Database migrations run before the new API version takes traffic (for
-    example, a Kubernetes Job or an init container).
+12. Database migrations run once, before the new API version takes traffic
+    (for example, a Kubernetes Job), not from every replica.
 
 ### It runs
 
@@ -131,9 +136,9 @@ the day, so we have to be able to ship at any time, even during the 12 to
   Traefik as its ingress controller.
 - `*.localhost` names resolve to your own machine in most browsers and in
   `curl`. If yours doesn't, add `127.0.0.1 bukka.localhost` to `/etc/hosts`.
-- If your images aren't public yet (BUK-63, step 13), the pods will sit in
+- If your images aren't public yet (BUK-63, step 14), the pods will sit in
   `ImagePullBackOff`. `kubectl describe pod` tells you why.
 - Useful commands: `kubectl get pods -w`, `kubectl describe pod <name>`,
-  `kubectl logs <pod>`, `kubectl rollout status deployment/api`,
+  `kubectl logs <pod>`, `kubectl rollout status deployment/menu-service`,
   `kubectl rollout history deployment/web`, `kubectl rollout undo
   deployment/web`, `kubectl get events --sort-by=.lastTimestamp`.
