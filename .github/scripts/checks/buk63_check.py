@@ -296,7 +296,7 @@ def remote(repo, green_id=None, red_id=None, workflow_sha256=None):
                      f"{why or 'not found'}. Did the images job push it, and is the package public "
                      "(Package settings → Change visibility)?"):
                 info("image", ref)
-    if check(bool(red), "A red run of ci.yml (the broken test from step 14)",
+    if check(bool(red), "A red run of ci.yml (the broken test from step 15)",
              "Push a commit that breaks an API test, let the pipeline fail, then revert it."):
         info("red_run", red[0].get("html_url"))
         info("red_run_id", red[0].get("id"))
