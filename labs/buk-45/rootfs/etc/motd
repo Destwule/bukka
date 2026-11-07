@@ -1,0 +1,12 @@
+
+  bukka-api-1 · Bukka API server (BUK-45)
+  ─────────────────────────────────────────
+  API code      /opt/bukka/api
+  Settings      /etc/bukka/api.env   (sudo to read or edit)
+  Data today    /var/lib/bukka/bukka.db  (SQLite, on this server's disk)
+
+  bukka-api status | restart | logs   manage the API
+  bukka-api migrate                   create or update the tables (alembic upgrade head)
+  bukka-api seed                      load the demo restaurants
+  psql "<url>"                        PostgreSQL client, to test a connection
+

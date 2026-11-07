@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Manage the Bukka API: bukka-api start|stop|restart|status|logs|migrate|seed
+# (On a normal server this would be systemd, like BUK-27.)
+set -euo pipefail
+PIDFILE=/run/bukka-api.pid
+LOG=/var/log/bukka/api.log
+
+load_env() { set -a; . /etc/bukka/api.env; set +a; }
+start() {
+  if status >/dev/null 2>&1; then echo "bukka-api is already running"; return 0; fi
+  mkdir -p /var/log/bukka
+  load_env
+  nohup sudo -E -u oncall python -m bukka_api.main >>"$LOG" 2>&1 &
+  echo $! > "$PIDFILE"
+  sleep 2
+  echo "bukka-api started (pid $(cat "$PIDFILE")), listening on ${BUKKA_HOST}:${BUKKA_PORT}"
+}
+stop() {
+  pkill -TERM -f "bukka_api.main" || true
+  rm -f "$PIDFILE"
+  echo "bukka-api stopped"
+}
+status() {
+  if pgrep -f "bukka_api.main" >/dev/null; then echo "bukka-api is running"; else echo "bukka-api is stopped"; return 3; fi
+}
+case "${1:-}" in
+  start|stop|restart|migrate|seed) [ "$(id -u)" -eq 0 ] || exec sudo "$0" "$@" ;;
+esac
+case "${1:-}" in
+  start) start ;;
+  stop) stop ;;
+  restart) stop; sleep 1; start ;;
+  status) status ;;
+  logs) tail -n "${2:-50}" "$LOG" ;;
+  migrate) load_env; cd /opt/bukka/api && alembic upgrade head ;;
+  seed) load_env; cd /opt/bukka/api && python -m bukka_api.seed ;;
+  *) echo "usage: bukka-api start|stop|restart|status|logs [lines]|migrate|seed"; exit 2 ;;
+esac

@@ -24,8 +24,8 @@
 > So before anything else moves, I want a proper network for production:
 > one part the internet can reach for the website and API, and a separate
 > part for the database that has no road to the internet at all. Build it
-> across two availability zones, because the managed database we're moving
-> to in BUK-45 needs that, and because a single data centre having a bad
+> across two availability zones, because a managed database like RDS
+> needs that when we get there, and because a single data centre having a bad
 > day at lunchtime shouldn't take all of Bukka down with it.
 >
 > Thanks,
@@ -111,10 +111,11 @@ No AWS account, no credit card, no bill. See the Notes for setup.
   centre in the same region. AWS requires a database subnet group to cover
   at least two of them, and it means one data centre failing doesn't have
   to mean Bukka is down.
-- **Starting LocalStack:**
+- **Starting LocalStack** (version pinned: newer images need a LocalStack
+  account):
   ```bash
-  docker run --rm -d --name localstack -p 4566:4566 -p 4510-4559:4510-4559 \
-    -v /var/run/docker.sock:/var/run/docker.sock localstack/localstack
+  docker run --rm -d --name localstack -p 4566:4566 \
+    -v /var/run/docker.sock:/var/run/docker.sock localstack/localstack:4.14.0
   ```
 - **Pointing the AWS CLI at it:**
   ```bash
