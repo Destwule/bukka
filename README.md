@@ -18,8 +18,6 @@ welcome. Start with **[Your first week](#your-first-week)**.
    work moves from a ticket to production.
 2. Pick up your onboarding ticket, [BUK-14](tickets/BUK-14.md). It gets your
    machine set up and gives you your own branch in this repo.
-3. Ask questions in the team channel early. Nobody expects you to know
-   everything in week one.
 
 ## How we work
 
@@ -93,7 +91,7 @@ Details: [api/README.md](api/README.md) and [web/README.md](web/README.md).
 
 ## Getting help
 
-Post in the team channel with:
+When you ask for help, include:
 
 - what you were trying to do
 - the exact command you ran
