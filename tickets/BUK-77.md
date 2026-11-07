@@ -55,7 +55,8 @@
 5. Add `docs/launch-checklist.md`. For each item, tick it and write one line
    on how you checked it. Include at least:
    - every pod runs as a non-root user and has requests and limits
-   - `web` and `api` run at least 2 replicas with readiness probes
+   - `web`, `menu-service` and `order-service` run at least 2 replicas
+     with readiness probes
    - no real passwords or keys are committed anywhere in the repo
    - the database is on a persistent volume and survives a pod restart
    - you can roll back a bad release in under a minute (and the command)
@@ -109,9 +110,9 @@
     `feat: launch readiness review and Lunch Rush test (BUK-77)`.
 14. In the pull request description, add a short **design note**:
     - an **architecture diagram** (a picture or a text diagram is fine)
-      showing web, api, worker, Redis, PostgreSQL, the Ingress, the
-      registry and the pipeline, and how a change gets from a commit to a
-      running pod
+      showing web, the menu and order services, the worker, Redis,
+      PostgreSQL, the Ingress, the registry and the pipeline, and how a
+      change gets from a commit to a running pod
     - your Lunch Rush results, and anything you changed to hit the target
     - the one thing you'd improve next if Bukka gave you another sprint
 

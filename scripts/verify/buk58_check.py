@@ -315,14 +315,15 @@ def check_end_to_end(rows, restart):
     since = str(int(time.time()) - 1)
     marker = "verify-" + secrets.token_hex(4)
     http("GET", f"/api/restaurants/{marker}/menu")
-    http("GET", "/api/kitchen/orders")
+    kitchen = "verify-" + secrets.token_hex(4)
+    http("GET", f"/api/kitchen/{kitchen}")  # a 404 from whichever service gets it, logged with its path
     time.sleep(2)
     menu_logs = logs(container(rows, "menu-service") or "x", since)
     order_logs = logs(container(rows, "order-service") or "x", since)
     check(marker in menu_logs and marker not in order_logs, "Nginx sends /api/restaurants* to menu-service",
           "location /api/restaurants { proxy_pass http://menu-service:8080; }")
-    check("/api/kitchen/orders" in order_logs and "/api/kitchen/orders" not in menu_logs,
-          "Nginx sends /api/kitchen* to order-service")
+    check(kitchen in order_logs and kitchen not in menu_logs, "Nginx sends /api/kitchen* to order-service",
+          "location /api/kitchen { proxy_pass http://order-service:8080; }")
 
     slug = "mama-put-yaba"
     _, menu = http("GET", f"/api/restaurants/{slug}/menu")
