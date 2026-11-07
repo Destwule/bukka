@@ -3,7 +3,7 @@ API := api
 WEB := web
 PY  := $(API)/.venv/bin/python
 
-.PHONY: help api-install api-migrate api-seed api-run api-test web-install web-build web-dev setup
+.PHONY: help api-install api-migrate api-seed api-run menu-run orders-run worker-run api-test web-install web-build web-dev setup
 
 help:
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -22,6 +22,15 @@ api-seed: ## Load demo restaurants and dishes (safe to repeat)
 
 api-run: ## Run the API on 0.0.0.0:8080
 	cd $(API) && .venv/bin/python -m bukka_api.main
+
+menu-run: ## Run only the menu service on :8081 (restaurants and menus)
+	cd $(API) && BUKKA_PORT=8081 .venv/bin/python -m bukka_api.services.menu
+
+orders-run: ## Run only the order service on :8082 (orders and kitchen)
+	cd $(API) && BUKKA_PORT=8082 .venv/bin/python -m bukka_api.services.orders
+
+worker-run: ## Run the worker (needs REDIS_URL, e.g. redis://127.0.0.1:6379/0)
+	cd $(API) && WORKER_HEALTH_PORT=8083 .venv/bin/python -m bukka_api.worker
 
 api-test: ## Run the API tests
 	cd $(API) && .venv/bin/pytest -q

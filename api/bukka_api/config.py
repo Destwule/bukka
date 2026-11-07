@@ -16,6 +16,10 @@ class Settings:
     port: int
     log_level: str
     environment: str
+    # The job queue, e.g. redis://redis:6379/0. Empty means no queue: the API
+    # works exactly the same, nothing is sent to the worker, and orders are
+    # moved along by hand on the kitchen screen.
+    redis_url: str = ""
 
 
 def get_settings() -> Settings:
@@ -25,4 +29,5 @@ def get_settings() -> Settings:
         port=int(os.getenv("BUKKA_PORT", "8080")),
         log_level=os.getenv("LOG_LEVEL", "info"),
         environment=os.getenv("BUKKA_ENV", "development"),
+        redis_url=os.getenv("REDIS_URL", ""),
     )
