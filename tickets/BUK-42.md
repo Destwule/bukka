@@ -7,29 +7,31 @@
 | **Epic** | BUK-2 Move to the cloud |
 | **Month** | 2 |
 | **Sprint** | 6 |
-| **Reporter** | Hussein (Engineering Lead) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of sprint 6 |
 
 ## Context
 
-> Nice work on BUK-38. Next up is the thing that worries me most.
->
-> Right now the orders database runs on bukka-prod-1, and that box has a
-> public IP. Amaka's scan found Postgres answering on 5432 from the
-> internet. The only thing between every customer's address and phone
-> number and the whole world is one password. That has to end before we
-> move the database to AWS.
->
-> So before anything else moves, I want a proper network for production:
-> one part the internet can reach for the website and API, and a separate
-> part for the database that has no road to the internet at all. Build it
-> across two availability zones, because a managed database like RDS
-> needs that when we get there, and because a single data centre having a bad
-> day at lunchtime shouldn't take all of Bukka down with it.
->
-> Thanks,
-> Hussein
+### Why this matters
+
+The orders database holds every customer's name, address and phone number,
+and right now it sits on a box with a public IP. A port scan found Postgres
+answering on 5432 from the internet: one password is all that stands
+between our customers' data and the world. That has to end before anything
+else moves to AWS.
+
+### What I need from you
+
+- A production VPC with two kinds of subnets: public ones the internet can
+  reach for the website and API, and private database subnets with no road
+  to the internet at all.
+- Spread across two availability zones, because a managed database like RDS
+  needs that when we get there, and one data centre having a bad day at
+  lunchtime shouldn't take all of Bukka down.
+- All of it saved as a script, so it can be rebuilt on a fresh account.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 

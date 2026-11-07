@@ -7,28 +7,29 @@
 | **Epic** | BUK-3 Containers and continuous delivery |
 | **Month** | 3 |
 | **Sprint** | 10 |
-| **Reporter** | Hussein (Engineering Lead) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of Sprint 10 |
 
 ## Context
 
-> Quick post-mortem from Friday so we don't repeat it. 🙈
->
-> Someone built the API image on their laptop, tagged it `latest` and pushed
-> it. It had a half-finished change in it that was never committed. When the
-> kitchen screen started showing orders twice during lunch, nobody could say
-> which code was actually running, because `latest` had been overwritten
-> twice that morning. We rolled back by guessing.
->
-> From now on, images are built by CI, not by people. Every pull request
-> gets tested and linted before anyone reviews it, and every image we
-> publish is tagged with the commit it was built from. If I see an image,
-> I want to be able to find the exact code behind it in ten seconds.
->
-> BUK-58 gave us the Dockerfiles. This ticket turns them into a pipeline.
->
-> Hussein
+### Why this matters
+
+Last Friday someone built the API image on their laptop, tagged it `latest`
+and pushed it, with a half-finished change inside. When the kitchen screen
+started showing orders twice during lunch, nobody could say which code was
+running, because `latest` had been overwritten twice that morning. We rolled
+back by guessing. 🙈
+
+### What I need from you
+
+- Images are built by CI, not by people.
+- Every pull request is tested and linted before anyone reviews it.
+- Every image we publish is tagged with the commit it was built from: if I
+  see an image, I want to find the exact code behind it in ten seconds.
+- BUK-58 gave us the Dockerfiles; this ticket turns them into a pipeline.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 

@@ -7,25 +7,31 @@
 | **Epic** | BUK-1 Platform foundations |
 | **Month** | 1 |
 | **Sprint** | 2 |
-| **Reporter** | Tolu (Customer Support) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You (on call) |
 | **Due** | End of the week |
 
 ## Context
 
-> 🚨 Since this morning customers are messaging us that the app "keeps
-> loading" and the restaurant list never shows up. A few say they got an
-> error page instead. Lunch orders are way down and two restaurants have
-> called asking if we're closed. Last night someone made changes on
-> bukka-prod-1 for the new security policy, but nobody is sure what was
-> changed. Can someone on call look at this ASAP?
->
-> — Tolu, Customer Support
+### Why this matters
 
-> Ops note: while you're on the box, apt updates and outbound calls have
-> been failing since the same change too.
->
-> — Hussein
+🚨 Since this morning, support has been flooded: customers say the app
+"keeps loading" and the restaurant list never shows up, and a few got an
+error page instead. Lunch orders are down sharply and two restaurant
+partners have called asking if we're closed. Every hour this lasts costs our
+partners real money, so this is the top priority for whoever is on call.
+
+### What I need from you
+
+- Last night someone changed bukka-prod-1 for the new security policy, and
+  nobody is sure exactly what. Find out what's broken, using evidence, not
+  guesses.
+- Apt updates and outbound calls from the box have also been failing since
+  the same change; treat that as part of the same incident.
+- Fix it properly on the server, then write the runbook so the next person
+  on call can fix it in five minutes.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 

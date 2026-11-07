@@ -7,29 +7,31 @@
 | **Epic** | BUK-3 Containers and continuous delivery |
 | **Month** | 3 |
 | **Sprint** | 12 |
-| **Reporter** | Adaeze (CTO) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of Sprint 12 |
 
 ## Context
 
-> Hi team 🎉
->
-> We've signed 40 new restaurant partners across Lekki, Yaba and Ikeja, and
-> marketing is running a "Lunch on Bukka" campaign on launch day. That means
-> our biggest lunch rush ever, all at once, between 12 and 2pm.
->
-> Over the last three months you've built every piece of this: the cloud
-> network and database in Terraform, the images, the pipeline and the
-> Kubernetes setup. Before I tell the partners we're ready, I want each of
-> you to bring it all together, show me it holds up under a lunch rush, and
-> walk Hussein through how it fits together.
->
-> This isn't a test of whether you know everything. It's the conversation
-> every team has before a launch: what we built, how we know it works, and
-> what we'd do if something went wrong. You've done the hard part already.
->
-> Adaeze, CTO
+### Why this matters 🎉
+
+We've signed 40 new restaurant partners across Lekki, Yaba and Ikeja, and
+marketing is running a "Lunch on Bukka" campaign on launch day: our biggest
+lunch rush ever, all at once, between 12 and 2pm. Before I tell the
+partners we're ready, I need to know the platform holds up.
+
+### What I need from you
+
+- Bring together everything you've built over three months: the cloud
+  network in Terraform, the images, the pipeline and the Kubernetes setup.
+- Show me it holds up under a lunch rush, and walk me through how it fits
+  together.
+
+This isn't a test of whether you know everything. It's the conversation every
+team has before a launch: what we built, how we know it works, and what we'd
+do if something went wrong. You've done the hard part already.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 

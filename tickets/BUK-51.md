@@ -7,28 +7,31 @@
 | **Epic** | BUK-2 Move to the cloud |
 | **Month** | 2 |
 | **Sprint** | 8 |
-| **Reporter** | Hussein (Engineering Lead) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of sprint 8 |
 
 ## Context
 
-> We now have three shell scripts that build production, and I already
-> don't trust them. Last week someone ran `buk-42.sh` twice and ended up
-> with two VPCs. Nobody can look at a script and tell what production
-> *should* look like, and there's no way to see what a change will do
-> before it happens.
->
-> From now on production is code. Everything from BUK-38, BUK-42 and
-> the AWS side of BUK-45 goes into Terraform, split into modules so the
-> network, the server, the database's firewall and the photos bucket can be
-> reviewed on their own.
-> Every change gets a plan that a teammate reads in the pull request
-> before anyone applies it. And I want to see you tear the whole thing
-> down and build it again, so we know it really works from scratch.
->
-> Thanks,
-> Hussein
+### Why this matters
+
+We're about to onboard a lot more restaurants, and our infrastructure is
+three shell scripts nobody fully trusts. Last week someone ran `buk-42.sh`
+twice and ended up with two VPCs. Nobody can look at a script and say what
+production *should* look like, or what a change will do before it happens.
+That's how outages and surprise bills start.
+
+### What I need from you
+
+- From now on production is code. Everything from BUK-38, BUK-42 and the AWS
+  side of BUK-45 goes into Terraform, in modules (network, compute, database,
+  storage, billing) that can be reviewed on their own.
+- State lives in a shared, locked bucket, not on a laptop.
+- Every change gets a plan that a teammate reads in the pull request before
+  anyone applies it.
+- Prove it works from scratch: tear the whole thing down and build it again.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 

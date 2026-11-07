@@ -7,29 +7,32 @@
 | **Epic** | BUK-1 Platform foundations |
 | **Month** | 1 |
 | **Sprint** | 3 |
-| **Reporter** | Hussein (Engineering Lead) |
+| **Reporter** | Hussein Alamutu (Product Manager & Lead DevOps Engineer) |
 | **Assignee** | You |
 | **Due** | End of the week |
 
 ## Context
 
-> Right now the API on bukka-web-1 is "run" by whoever last typed
-> `python -m bukka_api.main` in a terminal. When that terminal closed on
-> Sunday, Bukka went down for 40 minutes and nobody noticed until a
-> restaurant called. 😬
->
-> I want this server set up properly, the way we'll run every server from
-> now on:
->
-> - the API runs as a **service**: it starts on boot, restarts itself if it
->   crashes, and doesn't run as root
-> - **Nginx** sits in front: it serves the web app and passes `/api` to the
->   API, which only listens on localhost
-> - if the API is down, customers get a clear "kitchen is closed" message,
->   not a scary error page
-> - the config lives **in our repo**, so we can rebuild this server any time
->
-> — Hussein
+### Why this matters
+
+On Sunday, Bukka went down for 40 minutes because the API was "running" in
+someone's terminal and that terminal closed. Nobody noticed until a
+restaurant called. Partners judge us on whether we're open at lunchtime, and
+that outage should never be possible again.
+
+### What I need from you
+
+Set bukka-web-1 up the way we'll run every server from now on:
+
+- The API runs as a **service**: it starts on boot, restarts itself if it
+  crashes, and doesn't run as root.
+- **Nginx** sits in front: it serves the web app and passes `/api` to the
+  API, which only listens on localhost.
+- If the API is down, customers get a clear "kitchen is closed" message, not
+  a scary error page.
+- The config lives **in our repo**, so we can rebuild this server any time.
+
+— Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
 ## Acceptance criteria
 
