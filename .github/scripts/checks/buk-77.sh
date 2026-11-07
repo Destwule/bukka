@@ -8,7 +8,7 @@
 set -uo pipefail
 
 F="artifacts/buk-77-launch.txt"
-MIN_PASSES=70
+MIN_PASSES=100
 KUBECONFORM_VERSION="v0.6.7"
 FAILS=0
 OUT=""

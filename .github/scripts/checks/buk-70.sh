@@ -9,7 +9,7 @@
 set -uo pipefail
 
 F="artifacts/buk-70-kubernetes.txt"
-MIN_PASSES=50
+MIN_PASSES=80
 FAILS=0
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ok()  { echo "✓ $1"; }
