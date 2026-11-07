@@ -57,8 +57,9 @@ No AWS account, no credit card, no bill. See the Notes for setup.
    ```
 2. Every module has its own `main.tf`, `variables.tf` and `outputs.tf`.
 3. Modules don't hard-code each other's IDs. The root `main.tf` passes
-   outputs from one module into another (e.g. the network module's subnet
-   IDs into the database module).
+   outputs from one module into another (e.g. the network module's VPC ID
+   into the database module, and the compute module's `bukka-web-sg` ID
+   into it as the only source allowed on `5432`).
 
 ### Same rules as before
 
@@ -66,6 +67,8 @@ No AWS account, no credit card, no bill. See the Notes for setup.
    still holds: the same names, CIDRs and tags, read-only access to one
    bucket, `5432` only from `bukka-web-sg`, no route from the database
    subnets to the internet, Block Public Access and SSE-S3 on the bucket.
+   The API server runs in one of the web subnets of `bukka-prod-vpc`.
+   Terraform manages the bucket, not the photos in it: it can start empty.
 5. No secrets in the code: no passwords and no access keys anywhere.
    The database server itself stays in `infra/db/orders-db.sh` from
    BUK-45 (Terraform manages the AWS side only).
@@ -83,6 +86,8 @@ No AWS account, no credit card, no bill. See the Notes for setup.
 ### Plan, review, apply, destroy
 
 8. `terraform fmt -check -recursive` and `terraform validate` both pass.
+   Use Terraform **1.11 or newer** (`use_lockfile` needs it) and say so
+   with `required_version` in `versions.tf`.
 9. On a fresh LocalStack, run `terraform plan` and paste the plan summary
    (the list of resources and the `Plan: N to add` line) into your pull
    request description. A teammate reviews the plan, not just the code.
@@ -165,6 +170,18 @@ No AWS account, no credit card, no bill. See the Notes for setup.
   ```
   `tflocal` (from `pip install terraform-local`) can do this wiring for
   you if you prefer.
+- **Inputs:** your GitHub username and alert email are inputs, not
+  hard-coded. Put them in `infra/terraform/terraform.tfvars` (ignored by
+  git) and commit a `terraform.tfvars.example` so a teammate knows what to
+  fill in. The one exception is the state bucket name in `backend.tf`:
+  backends can't read variables.
+- **AMI:** LocalStack accepts the AMI IDs it lists with
+  `aws ec2 describe-images`, e.g. `ami-ff0fea8310f3`. Make it a variable
+  with a default.
+- **No tags on the CloudWatch alarm** (and no `default_tags` in the
+  provider, which would add them): LocalStack 4.14 can't read back an
+  alarm that has tags, and `terraform apply` hangs on it. Tag everything
+  else directly if you like.
 - Start small: get the network module planning and applying first, then
   add one module at a time.
 - Useful commands: `terraform init`, `terraform fmt -recursive`,
