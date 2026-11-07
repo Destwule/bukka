@@ -25,8 +25,7 @@ how your machine connects to it.
 - Work as a normal user with `sudo`, not as root, the way we do on every server.
 - Connect to GitHub with an SSH key, not a password.
 
-Every ticket after this one assumes all three are in place. Shout in the
-channel if anything gets in your way.
+Every ticket after this one assumes all three are in place.
 
 — Hussein Alamutu, Product Manager & Lead DevOps Engineer
 
