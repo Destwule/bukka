@@ -81,7 +81,7 @@ if [ -n "$DB_UP" ]; then
   PW=$(docker exec "$DB" printenv POSTGRES_PASSWORD 2>/dev/null || true)
   if [ "${#PW}" -ge 16 ]; then pass "The password is at least 16 characters"; else
     fail "The password is at least 16 characters" "It's ${#PW}."; fi
-  if [ -n "$PW" ] && { git grep -qF -- "$PW" 2>/dev/null || git log --all -p 2>/dev/null | grep -qF -- "$PW"; }; then
+  if [ -n "$PW" ] && { git grep -qF -- "$PW" 2>/dev/null || git log --all -p 2>/dev/null | grep -F -- "$PW" >/dev/null; }; then
     fail "The password isn't in any file or commit" "It's in your repo. Remove it, and change the password: it's leaked."
   else
     pass "The password isn't in any file or commit"
