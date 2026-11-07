@@ -37,7 +37,8 @@ the day, so we have to be able to ship at any time, even during the 12 to
 ### The manifests
 
 1. Put your manifests in `k8s/`, one file per kind of resource or per
-   service, whichever you find easier to read.
+   service, whichever you find easier to read. Everything goes in a
+   namespace called `bukka`.
 2. **Deployments** for `web`, `menu-service`, `order-service` and
    `worker`, using your images from GHCR (`bukka-web` and `bukka-api`),
    tagged with a commit SHA (never `latest`).
@@ -54,15 +55,22 @@ the day, so we have to be able to ship at any time, even during the 12 to
    probe on its own `/healthz` port.
 6. **Resource requests and limits** (CPU and memory) on every container.
 7. **No container runs as root:** `securityContext.runAsNonRoot: true` on
-   every pod, and the pods actually start with it.
+   the `web`, `menu-service`, `order-service` and `worker` pods, and the
+   pods actually start with it. (Doing the same for PostgreSQL and Redis is
+   a good stretch: their images have their own non-root users.)
 8. **Services** for `web`, `menu-service` and `order-service`, so pods find
    each other by name. The web container's Nginx forwards
    `/api/restaurants*` to `menu-service` and `/api/orders*` and
    `/api/kitchen*` to `order-service`, as in BUK-58.
 9. A **ConfigMap** for settings that aren't secret, and a **Secret** for the
-   database password and `DATABASE_URL`. This repo is public: commit a
-   `secret.example.yaml` with placeholder values and create the real Secret
-   with `kubectl create secret`. Never commit a real password.
+   database password and `DATABASE_URL`. This repo is public: create the
+   real Secret with `kubectl create secret`, and commit
+   `k8s/examples/secret.example.yaml` showing its shape with placeholder
+   values. Keep it in that subfolder: `kubectl apply -f k8s/` doesn't read
+   subfolders, so it never overwrites your real Secret. The placeholders
+   must work together (the same password in both values): the check on your
+   pull request uses this file to deploy your app to a throwaway cluster.
+   Never commit a real password.
 10. An **Ingress** that sends `http://bukka.localhost` to the `web` Service.
 11. PostgreSQL and Redis can run in the cluster as single-replica
     Deployments (or StatefulSets), with a PersistentVolumeClaim for the
@@ -83,7 +91,8 @@ the day, so we have to be able to ship at any time, even during the 12 to
     "Free delivery before 12pm" banner. Let CI build it into a new image
     with a new SHA tag.
 15. Start a loop that places an order every second against
-    `http://bukka.localhost` and records the status code of each request.
+    `http://bukka.localhost` and prints one line per request with its HTTP
+    status code (`curl -w '%{http_code}'` is your friend).
 16. While the loop runs, roll out the new image (`kubectl set image` or
     update the tag and `kubectl apply`). Watch it with
     `kubectl rollout status`.
@@ -98,8 +107,12 @@ the day, so we have to be able to ship at any time, even during the 12 to
 19. Work on a branch called `buk-70-kubernetes-rollouts`, created from
     `upstream/apprentice/<your-github-username>`.
 20. With your cluster running the new version, run
-    `bash scripts/verify/buk-70.sh`. It writes
-    `artifacts/buk-70-kubernetes.txt`.
+    `bash scripts/verify/buk-70.sh`. It checks your manifests and the
+    cluster, places an order through `http://bukka.localhost` and waits for
+    the worker to deliver it, then runs its own lunch-time test: customers
+    keep ordering while it rolls out `web`, `menu-service` and
+    `order-service` (`kubectl rollout restart`). **Not one request may
+    fail.** It writes `artifacts/buk-70-kubernetes.txt`.
 21. Commit your manifests, the menu change, the loop script, both artifact
     files, push, and open a pull request into
     `apprentice/<your-github-username>`, titled
@@ -116,7 +129,8 @@ the day, so we have to be able to ship at any time, even during the 12 to
 
 - [ ] A fresh `kubectl apply -f k8s/` brings everything up without manual fixes
 - [ ] Your rollout log shows no failed orders during the update and the rollback
-- [ ] `verify` passes on your pull request
+- [ ] `verify` passes on your pull request (it builds your images and
+      deploys `k8s/` to a fresh kind cluster, so allow it 15 minutes)
 - [ ] A teammate has reviewed and approved your pull request
 
 ## Notes
@@ -138,6 +152,14 @@ the day, so we have to be able to ship at any time, even during the 12 to
   `curl`. If yours doesn't, add `127.0.0.1 bukka.localhost` to `/etc/hosts`.
 - If your images aren't public yet (BUK-63, step 14), the pods will sit in
   `ImagePullBackOff`. `kubectl describe pod` tells you why.
+- **If a few requests fail during every rollout,** your probes are probably
+  fine and the problem is the moment a pod is told to stop: it can stop
+  before the Service and the Ingress have stopped sending it traffic. Look
+  up "Kubernetes graceful shutdown preStop" and think about what a pod
+  should do in those few seconds.
+- **A Job can't be changed once it exists.** To run migrations for a new
+  image, delete the old Job first (`kubectl -n bukka delete job <name>`),
+  then apply.
 - Useful commands: `kubectl get pods -w`, `kubectl describe pod <name>`,
   `kubectl logs <pod>`, `kubectl rollout status deployment/menu-service`,
   `kubectl rollout history deployment/web`, `kubectl rollout undo
