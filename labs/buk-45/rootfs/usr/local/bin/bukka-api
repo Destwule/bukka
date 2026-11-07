@@ -10,7 +10,7 @@ start() {
   if status >/dev/null 2>&1; then echo "bukka-api is already running"; return 0; fi
   mkdir -p /var/log/bukka
   load_env
-  nohup sudo -E -u oncall python -m bukka_api.main >>"$LOG" 2>&1 &
+  nohup sudo -E -u oncall env HOME=/home/oncall python -m bukka_api.main >>"$LOG" 2>&1 &
   echo $! > "$PIDFILE"
   sleep 2
   echo "bukka-api started (pid $(cat "$PIDFILE")), listening on ${BUKKA_HOST}:${BUKKA_PORT}"
