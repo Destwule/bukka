@@ -116,7 +116,7 @@ if [ -f "$TF/backend.tf" ] && grep -qE 'backend[[:space:]]+"s3"' "$TF/backend.tf
 else
   fail "backend.tf uses the s3 backend with use_lockfile = true" "terraform { backend \"s3\" { bucket = \"bukka-tfstate-<you>\" ... use_lockfile = true } }"
 fi
-if [ -f "$TF/backend.tf" ] && ! grep -qiE 'localhost|localstack|4566' "$TF/backend.tf"; then
+if [ -f "$TF/backend.tf" ] && ! grep -vE '^[[:space:]]*(#|//)' "$TF/backend.tf" | grep -qiE 'localhost|localstack|4566'; then
   pass "backend.tf has no LocalStack settings (they go in a -backend-config file)"
 else
   fail "backend.tf has no LocalStack settings (they go in a -backend-config file)" "Move endpoints and skip_* settings into backend-localstack.hcl and pass it to terraform init."

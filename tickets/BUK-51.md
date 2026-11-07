@@ -175,6 +175,10 @@ No AWS account, no credit card, no bill. See the Notes for setup.
 - **AMI:** LocalStack accepts the AMI IDs it lists with
   `aws ec2 describe-images`, e.g. `ami-ff0fea8310f3`. Make it a variable
   with a default.
+- **No tags on the CloudWatch alarm** (and no `default_tags` in the
+  provider, which would add them): LocalStack 4.14 can't read back an
+  alarm that has tags, and `terraform apply` hangs on it. Tag everything
+  else directly if you like.
 - Start small: get the network module planning and applying first, then
   add one module at a time.
 - Useful commands: `terraform init`, `terraform fmt -recursive`,
