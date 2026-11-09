@@ -10,11 +10,11 @@ When your file is merged into `main`, your production branch
 Copy this template:
 
 ```markdown
-# <Your name>
+# Tod Jolayemi
 
-- **GitHub:** @<your-github-username>
-- **Based in:** <city, country>
-- **Background:** <one or two lines: what you've done before>
-- **What I want from this team:** <one line>
-- **Ask me about:** <something you know well, tech or not>
+- **GitHub:** @TodJolayemi
+- **Based in:** Texas, USA
+- **Background:** I've done so many things lol...
+- **What I want from this team:** To learn from the best and to network.
+- **Ask me about:** Tech, Business, Photography, Lifestyle generally...
 ```
