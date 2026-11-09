@@ -12,7 +12,7 @@ Copy this template:
 ```markdown
 # Tod Jolayemi
 
-- **GitHub:** @TodJolayemi
+- **GitHub:** @Todjolayemi
 - **Based in:** Texas, USA
 - **Background:** I've done so many things lol...
 - **What I want from this team:** To learn from the best and to network.
