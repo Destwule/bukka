@@ -8,7 +8,9 @@ BUK-
 
 ## How I tested it
 
-<!-- The commands you ran and what you saw. Paste the verify script output if the ticket has one. -->
+<!-- In a few sentences: the commands you ran and what you saw. Summarise the verify result
+     (e.g. "Ran scripts/verify/buk-14.sh: 9 PASS, fails: 0"). Don't paste the full output:
+     it's in your artifact file, and it can expose your email and machine details. -->
 
 ## Anything the reviewer should look at closely?
 
