@@ -130,7 +130,7 @@ def main() -> int:
             bad(f"The description has no '## {heading}' section. Use the pull request template.")
         elif pasted > MAX_PASTED_LINES:
             bad(f"'{heading}' has {pasted} lines of pasted command output. Summarise it in "
-                "your own words instead, e.g. 'Ran scripts/verify/{(expected or 'BUK-NN').lower()}.sh: all PASS, fails: 0'. "
+                f"your own words instead, e.g. 'Ran scripts/verify/{(expected or 'BUK-NN').lower()}.sh: all PASS, fails: 0'. "
                 "The artifact file already holds the full output, and raw output can "
                 "expose your email, machine name and user id in a public PR.")
         elif words < MIN_WORDS:
