@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # CI gate for every pull request into alamz-tech/bukka.
-# Inputs (env): PR_AUTHOR, PR_TITLE, BASE_REF, HEAD_REF.
+# Inputs (env): PR_AUTHOR, PR_TITLE, PR_BODY, BASE_REF, HEAD_REF.
 # Runs on the merge commit GitHub builds for the PR; HEAD^1 is the base.
 
 set -uo pipefail
@@ -99,6 +99,24 @@ elif [[ "$BASE_REF" == apprentice/* ]]; then
 
 else
   bad "Pull requests must target main (joining the team) or apprentice/$PR_AUTHOR (ticket work), not $BASE_REF."
+fi
+
+# --- The description ------------------------------------------------------
+# A reviewer reads it first: which ticket, what changed, how you tested it.
+echo
+echo "== Pull request description =="
+if [[ "$BASE_REF" == apprentice/* ]]; then
+  DESC_TICKET="${BRANCH_TICKET:-}"; DESC_OPTS=""
+else
+  # Joining the team is BUK-14; a runbook PR names its ticket in the title.
+  if [[ "$PR_TITLE" =~ \((BUK-[0-9]+)\)$ ]]; then DESC_TICKET="${BASH_REMATCH[1]}"
+  elif echo "$CHANGED" | grep '^team/' >/dev/null; then DESC_TICKET="BUK-14"
+  else DESC_TICKET=""; fi
+  DESC_OPTS="--no-checklist"
+fi
+if ! PR_BODY="${PR_BODY:-}" python3 .github/scripts/pr_description_check.py $DESC_TICKET $DESC_OPTS; then
+  FAILS=$((FAILS + 1))
+  echo "  Edit the description on GitHub (… menu → Edit). This check re-runs by itself; no new commit needed."
 fi
 
 echo
