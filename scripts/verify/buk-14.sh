@@ -81,7 +81,8 @@ fi
 GIT_NAME=$(git config user.name || true)
 GIT_EMAIL=$(git config user.email || true)
 if [ -n "$GIT_NAME" ] && [ -n "$GIT_EMAIL" ]; then
-  pass "Git identity set ($GIT_NAME <$GIT_EMAIL>)"
+  # The email stays off the audit: this file is committed to a public repo.
+  pass "Git identity set ($GIT_NAME, email set)"
 else
   fail "Git identity set" "Run: git config --global user.name \"Your Name\" and git config --global user.email you@example.com"
 fi
@@ -124,8 +125,8 @@ mkdir -p artifacts
   echo "github_user: ${GH_USER:-unknown}"
   echo "whoami: $(whoami)"
   echo "id: $(id)"
-  echo "uname: $(uname -a)"
-  echo "git_identity: $GIT_NAME <$GIT_EMAIL>"
+  echo "uname: $(uname -sr)"  # OS and kernel only; -a would add the hostname
+  echo "git_identity: $GIT_NAME (email set)"
   echo "origin: $ORIGIN"
   echo "upstream: $UPSTREAM"
   echo "branch: $BRANCH"

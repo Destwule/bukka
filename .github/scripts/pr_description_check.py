@@ -14,6 +14,14 @@ import sys
 
 MIN_WORDS = 8  # "What changed" and "How I tested it" need real sentences
 MAX_PASTED_LINES = 4  # more than this many lines of raw output = a paste
+# Whatever the format, a section this long is a paste, not a summary. This is
+# the catch-all: OUTPUT_LINE below only recognises shapes we've seen before.
+MAX_SECTION_LINES = 10
+
+# Email addresses don't belong in a public PR. git@github.com is the SSH
+# login name in commands like 'ssh -T git@github.com', not a person.
+EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+NOT_PERSONAL = {"git@github.com"}
 
 # Lines that look like command output rather than something you wrote:
 # verify results, "key: value" dumps, shell prompts, ids, timestamps.
@@ -21,6 +29,9 @@ OUTPUT_LINE = re.compile(
     r"^\s*(?:"
     r"(?:PASS|FAIL|WARN|OK|ERROR)\b"           # PASS  Working as ...
     r"|[$#>]\s+\S"                            # $ ssh -T git@github.com
+    r"|\S+@[\w.-]+:\S*\s*[$#]"                  # tod@laptop:~/bukka$ ...
+    r"|[\u2713\u2714\u2717\u2718]"                # ✓ Working as a normal user
+    r"|={2,}"                                 # == BUK-14 verify ==
     r"|[a-z_][a-z0-9_]*:\s+\S"                 # github_user: tod
     r"|.*\buid=\d+"                           # id output
     r"|.*\d{4}-\d\d-\d\dT\d\d:\d\d"           # ISO timestamps
@@ -126,13 +137,23 @@ def main() -> int:
         text = find(secs, heading)
         prose, pasted = split_output(text or "")
         words = len(re.findall(r"[A-Za-z0-9]+", prose))
+        lines = len([l for l in (text or "").splitlines() if l.strip() and not l.strip().startswith("```")])
+        emails = sorted({e for e in EMAIL.findall(text or "") if e.lower() not in NOT_PERSONAL})
+        summary_hint = (f"e.g. 'Ran scripts/verify/{(expected or 'BUK-NN').lower()}.sh: all PASS, fails: 0'. "
+                        "The artifact file already holds the full output.")
         if text is None:
             bad(f"The description has no '## {heading}' section. Use the pull request template.")
+        elif lines > MAX_SECTION_LINES:
+            bad(f"'{heading}' is {lines} lines long. Summarise it in a few sentences instead, "
+                f"{summary_hint}")
         elif pasted > MAX_PASTED_LINES:
             bad(f"'{heading}' has {pasted} lines of pasted command output. Summarise it in "
                 f"your own words instead, e.g. 'Ran scripts/verify/{(expected or 'BUK-NN').lower()}.sh: all PASS, fails: 0'. "
                 "The artifact file already holds the full output, and raw output can "
                 "expose your email, machine name and user id in a public PR.")
+        elif emails:
+            bad(f"'{heading}' shows an email address ({', '.join(emails)}). This pull request is "
+                "public: remove it and write 'Git identity set' instead.")
         elif words < MIN_WORDS:
             bad(f"'{heading}' is {'empty' if words == 0 else 'too short'}. Write {hint}.")
         else:
