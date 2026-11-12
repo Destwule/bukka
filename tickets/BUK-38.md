@@ -82,8 +82,8 @@ No AWS account, no credit card, no bill. See the Notes for setup.
 10. Save every command you ran, in order, in `infra/cli/buk-38.sh`, so you
     (or a teammate) can rebuild all of this on a fresh LocalStack with one
     command. You will need this in BUK-42 and BUK-45.
-11. In your pull request description, add a short design note (a few
-    sentences each):
+11. In your pull request description, add a short design note under
+    **Anything the reviewer should look at closely?** (a few sentences each):
     - Why an instance profile is safer than a key in a `.env` file
     - What an attacker on the server could and couldn't do with this role
     - Why SSH is closed (or limited to your IP)

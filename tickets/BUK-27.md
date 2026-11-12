@@ -81,8 +81,8 @@ Set bukka-web-1 up the way we'll run every server from now on:
 10. Commit `deploy/` and the audit file, push, and open a pull request into
     `apprentice/<your-github-username>`, titled
     `feat: run the API under systemd behind nginx (BUK-27)`.
-11. In the pull request description, under a `## Design note` heading,
-    answer in a few sentences: why does the
+11. In the pull request description, under **Anything the reviewer should
+    look at closely?**, answer in a few sentences: why does the
     API listen only on `127.0.0.1` now that Nginx is in front?
 
 ## Definition of done

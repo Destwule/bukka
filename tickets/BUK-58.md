@@ -146,8 +146,9 @@ in `api/`, started with different commands.
     titled `feat: containerise the web app, API and worker (BUK-58)`. The
     `verify` check builds your images and starts your stack from scratch,
     with `.env` copied from `.env.example`, and runs the same checks again.
-19. In the pull request description, add a short **design note** under a
-    `## Design note` heading (a few sentences each is plenty):
+19. In the pull request description, add a short **design note** under
+    **Anything the reviewer should look at closely?** (a few sentences each
+    is plenty):
     - the size of each final image, and one thing you did to make it smaller
     - whether the worker and the two services share one image, and why
     - how the migrations run on start-up, and what would happen if both

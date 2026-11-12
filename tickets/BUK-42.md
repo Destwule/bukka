@@ -74,7 +74,8 @@ No AWS account, no credit card, no bill. See the Notes for setup.
 
 8. Save every command you ran, in order, in `infra/cli/buk-42.sh`, so the
    network can be rebuilt on a fresh LocalStack with one command.
-9. In your pull request description, add:
+9. In your pull request description, under **Anything the reviewer should
+   look at closely?**, add:
    - A simple diagram of the network (ASCII art or a picture is fine) showing
      the VPC, the four subnets, both route tables and the internet gateway
    - A short design note: why the database subnets have no internet route,

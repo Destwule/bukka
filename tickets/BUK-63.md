@@ -99,8 +99,8 @@ back by guessing. 🙈
     `verify` check lints your workflow again and looks up the runs and
     images in your audit on GitHub. If you change `ci.yml` after the
     audit, push, wait for a green run, and run the verify script again.
-19. In the pull request description, add a short **design note** under a
-    `## Design note` heading:
+19. In the pull request description, add a short **design note** under
+    **Anything the reviewer should look at closely?**:
     - links to one green run and the red run from step 15
     - the full name and tag of one image you published, and how you'd find
       the commit it was built from
