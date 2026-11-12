@@ -88,9 +88,11 @@ No AWS account, no credit card, no bill. See the Notes for setup.
 8. `terraform fmt -check -recursive` and `terraform validate` both pass.
    Use Terraform **1.11 or newer** (`use_lockfile` needs it) and say so
    with `required_version` in `versions.tf`.
-9. On a fresh LocalStack, run `terraform plan` and paste the plan summary
-   (the list of resources and the `Plan: N to add` line) into your pull
-   request description. A teammate reviews the plan, not just the code.
+9. On a fresh LocalStack, save the plan to a file and commit it:
+   `terraform plan -no-color > artifacts/buk-51-terraform-plan.txt`. In your
+   pull request description, quote only the `Plan: N to add` line and say in
+   a sentence what you'd want a reviewer to check. A teammate reviews the
+   plan file in the pull request, not just the code.
 10. `terraform apply` builds everything in one go, with no errors.
 11. Running `terraform plan` again straight after shows **No changes**.
 12. `terraform destroy` removes everything cleanly, and a second

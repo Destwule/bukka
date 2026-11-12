@@ -147,8 +147,9 @@ before launch.
     files and anything you fixed along the way, push, and open a pull
     request into `apprentice/<your-github-username>`, titled
     `feat: launch readiness review and Lunch Rush test (BUK-77)`.
-15. In the pull request description, link your readiness review and paste
-    the top of your Lunch Rush summary.
+15. In the pull request description, link your readiness review and give
+    your Lunch Rush numbers in one line (requests, error rate, p95). The
+    full summary is already in `artifacts/buk-77-lunch-rush.txt`.
 
 ## Definition of done
 

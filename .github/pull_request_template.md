@@ -13,6 +13,10 @@ BUK-
      it's in your artifact file, and it can expose your email and machine details.
      The verify check fails a section over 10 lines or one with an email address. -->
 
+## Design note
+
+<!-- Only if the ticket asks for one; otherwise delete this section. -->
+
 ## Anything the reviewer should look at closely?
 
 <!-- Something you weren't sure about, or a trade-off you made. -->
