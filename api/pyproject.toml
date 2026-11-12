@@ -2,6 +2,7 @@
 name = "bukka-api"
 version = "1.0.0"
 description = "Bukka food ordering API"
+license = { text = "PolyForm-Noncommercial-1.0.0" }
 requires-python = ">=3.10"
 dependencies = [
   "fastapi>=0.110",
