@@ -44,7 +44,6 @@ SECTIONS = {
     "checklist": "Checklist",
 }
 
-TEMPLATE_HEADINGS = tuple(h.lower() for h in SECTIONS.values()) + ("anything the reviewer",)
 
 fails = 0
 
@@ -61,15 +60,17 @@ def bad(msg: str) -> None:
 
 
 def sections(body: str) -> dict[str, str]:
-    """Split the description on the template's '## Heading' lines, with HTML
-    comments (the template's hints) removed. Other '#' lines stay as content,
-    so pasted output that starts with '# ...' can't hide in its own section."""
+    """Split the description on '## Heading' lines (two or more #), with HTML
+    comments (the template's hints) removed. A single '#' line stays as
+    content, so pasted output that starts with '# ...' can't hide in its own
+    section, while extra sections a ticket asks for (like '## Design note')
+    don't count towards 'How I tested it'."""
     body = re.sub(r"<!--[\s\S]*?-->", "", body.replace("\r\n", "\n"))
     out: dict[str, str] = {}
     current = None
     for line in body.split("\n"):
         m = re.match(r"^\s*#{1,6}\s+(.+?)\s*#*\s*$", line)
-        if m and m.group(1).strip().lower().startswith(TEMPLATE_HEADINGS):
+        if m and line.lstrip().startswith("##"):
             current = m.group(1).strip().lower()
             out[current] = ""
         elif current is not None:

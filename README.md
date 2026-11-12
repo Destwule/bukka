@@ -112,4 +112,4 @@ Copyright 2026 Alamz Tech Ltd.
   for example selling it, running it as a paid service, or using the tickets
   and labs in a paid course or bootcamp.
 
-For commercial use, contact Alamz Tech at info@alamztech.com.
+For commercial use, contact Alamz Tech at info-ewd@alamztech.com.
