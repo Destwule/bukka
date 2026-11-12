@@ -90,3 +90,9 @@ Good reviews are specific and kind:
 - **Point to the exact line** and suggest the change.
 - **Say what's good too.**
 - **Approve** when you'd be comfortable with this running in production.
+
+## License for your contributions
+
+By opening a pull request, you agree that your contribution is licensed under
+the same terms as the rest of the repository, the
+[PolyForm Noncommercial License 1.0.0](LICENSE.md).

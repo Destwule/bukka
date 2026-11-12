@@ -100,3 +100,16 @@ When you ask for help, include:
 
 If you've been stuck for 30 minutes, ask. That's how it works on every good
 team.
+
+## License
+
+Bukka is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE.md).
+Copyright 2026 Alamz Tech Ltd.
+
+- **You may** use, copy and change it for learning, personal projects, research
+  and teaching, including in your own fork and your portfolio.
+- **You may not** use it, or anything built from it, for commercial purposes:
+  for example selling it, running it as a paid service, or using the tickets
+  and labs in a paid course or bootcamp.
+
+For commercial use, contact Alamz Tech at info@alamztech.com.
