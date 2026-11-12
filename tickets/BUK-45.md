@@ -117,7 +117,8 @@ There are two halves, both on your machine, no AWS account and no bill:
     - a connection attempt from a container on `bukka-web-net` that **fails**,
       and the same attempt from `bukka-api-1` that **works**
       (`pg_isready -h <address> -p 5432`)
-15. Add a short design note to the pull request description:
+15. Add a short design note to the pull request description, under
+    **Anything the reviewer should look at closely?**:
     - Why the database isn't simply on `bukka-web-net` with a strong password
     - Why `bukka-db-sg` uses a security group as the source instead of the
       API server's IP address

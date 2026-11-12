@@ -102,7 +102,8 @@ No AWS account, no credit card, no bill. See the Notes for setup.
 
 ### Write it down
 
-14. Add a short design note to your pull request description:
+14. Add a short design note to your pull request description, under
+    **Anything the reviewer should look at closely?**:
     - Why you split the modules the way you did, and what each one outputs
     - Why state lives in S3 and not on your laptop, and why it needs
       locking

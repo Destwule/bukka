@@ -117,8 +117,8 @@ the day, so we have to be able to ship at any time, even during the 12 to
     files, push, and open a pull request into
     `apprentice/<your-github-username>`, titled
     `feat: deploy Bukka to Kubernetes with rolling updates (BUK-70)`.
-22. In the pull request description, add a short **design note** under a
-    `## Design note` heading:
+22. In the pull request description, add a short **design note** under
+    **Anything the reviewer should look at closely?**:
     - **why liveness checks `/healthz` but readiness checks `/readyz`**, and
       what would happen to every API pod during a database blip if
       liveness checked `/readyz` instead
