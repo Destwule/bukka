@@ -123,6 +123,6 @@ echo
 if [ "$FAILS" -eq 0 ]; then
   echo "verify passed"
 else
-  echo "verify failed: fix the items marked ✗ above, then push again."
+  echo "verify failed: fix the items marked ✗ above. Push for file changes; for the description, just edit it on GitHub."
   exit 1
 fi
